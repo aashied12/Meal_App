@@ -100,7 +100,10 @@ function displayMealDetail(mealId) {
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
     .then(response => response.json())
     .then(data => {
-      const meal = data.meals[0];
+      const meal = data.meals ? data.meals[0] : null;
+      if (!meal) {
+        throw new Error(`No meal found with ID ${mealId}`);
+      }
       const mealDetailContainer = document.getElementById("meal-detail-container");
 
       // Create HTML elements for the meal detail
@@ -121,6 +124,7 @@ function displayMealDetail(mealId) {
       console.error(`Error fetching meal detail: ${error}`);
     });
 }
+
 
 // Add meal to favourites
 function addMealToFavourites(mealID) {
@@ -180,6 +184,3 @@ function updateFavouritesUI() {
     favouriteMealsContainer.innerHTML = noFavouritesElement;
   }
 }
-
-
-
