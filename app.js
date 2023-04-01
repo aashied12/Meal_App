@@ -88,83 +88,36 @@ function displayMealDetail(meal) {
     }
   }
 
- // Create HTML for meal detail
-function createMealDetailHTML(meal) {
-const mealDetail = document.createElement('div');
-mealDetail.classList.add('meal-detail');
+  // Create HTML for meal detail
+  const mealDetail = document.createElement('div');
+  mealDetail.classList.add('meal-detail');
 
-// Create HTML for meal name and image
-const nameAndImage = document.createElement('div');
-nameAndImage.classList.add('name-and-image');
-nameAndImage.innerHTML = <img src="${meal.strMealThumb}" alt="${meal.strMeal}"> <h2>${meal.strMeal}</h2> ;
-mealDetail.appendChild(nameAndImage);
+  // Create HTML for meal name and image
+  const nameAndImage = document.createElement('div');
+  nameAndImage.classList.add('name-and-image');
+  nameAndImage.innerHTML = `<img src="${meal.strMealThumb}" alt="${meal.strMeal}"> <h2>${meal.strMeal}</h2>`;
+  mealDetail.appendChild(nameAndImage);
 
-// Create HTML for meal information
+  // Create HTML for meal information
 const information = document.createElement('div');
 information.classList.add('information');
-information.innerHTML = <h3>Instructions</h3> <p>${meal.strInstructions}</p> <h3>Ingredients</h3> ;
-mealDetail.appendChild(information);
-  
-  
+information.innerHTML = `<h3>Instructions</h3> <p>${meal.strInstructions}</p> <h3>Ingredients</h3>`;
+
 // Create HTML for meal ingredients
-const ingredients = document.createElement('ul');
-ingredients.classList.add('ingredients');
+const ingredientsList = document.createElement('ul');
+ingredientsList.classList.add('ingredients');
 for (let i = 1; i <= 20; i++) {
-if (meal[strIngredient${i}]) {
-const ingredient = document.createElement('li');
-ingredient.textContent = ${meal[strIngredient${i}]} - ${meal[strMeasure${i}]};
-ingredients.appendChild(ingredient);
-} else {
-break;
+  if (meal[`strIngredient${i}`]) {
+    const ingredientItem = document.createElement('li');
+    ingredientItem.textContent = `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`;
+    ingredientsList.appendChild(ingredientItem);
+  } else {
+    break;
+  }
 }
-}
-information.appendChild(ingredients);
+information.appendChild(ingredientsList);
+
+mealDetail.appendChild(information);
 
 return mealDetail;
 }
-
-// Add event listener for meal click
-mealsContainer.addEventListener('click', async (event) => {
-if (event.target.classList.contains('meal')) {
-const mealId = event.target.dataset.id;
-const meal = await getMealById(mealId);
-const mealDetailHTML = createMealDetailHTML(meal);
-mealsContainer.innerHTML = '';
-mealsContainer.appendChild(mealDetailHTML);
-}
-});
-
-// Event listener for search input
-searchInput.addEventListener('input', async (event) => {
-  const query = encodeURIComponent(event.target.value.trim());
-  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
-  const data = await response.json();
-  searchResults.innerHTML = "";
-  if (data.meals) {
-    data.meals.forEach((meal) => {
-      const mealElement = document.createElement("div");
-      mealElement.classList.add("meal");
-      mealElement.innerHTML = `
-        <div class="meal-header">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-        </div>
-        <div class="meal-body">
-          <h4>${meal.strMeal}</h4>
-          <button class="btn" onclick="addToFavorites('${meal.idMeal}')">Add to Favorites</button>
-        </div>
-      `;
-      mealElement.addEventListener("click", () => {
-        showMealDetails(meal.idMeal);
-      });
-      searchResults.appendChild(mealElement);
-    });
-  } else {
-    searchResults.innerHTML = "No results found.";
-  }
-});
-
-// Initialize page with popular meals
-(async function () {
-const popularMeals = await getPopularMeals();
-renderMeals(popularMeals);
-})();
