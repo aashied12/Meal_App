@@ -28,22 +28,13 @@ searchForm.addEventListener('submit', async (event) => {
 
 // Event listener for meal container click
 mealsContainer.addEventListener('click', async (event) => {
-	console.log(event.path);
-  const mealInfo = event.path.find((item) => {
-    if (item.classList) {
-      return item.classList.contains('meal-info');
-    } else {
-      return false;
-    }
-  });
-
+  const mealInfo = event.target.closest('.meal').querySelector('.meal-info');
   if (mealInfo) {
     const mealID = mealInfo.getAttribute('data-mealid');
     const meal = await getMealByID(mealID);
     displayMealDetail(meal);
   }
 });
-
 // Event listener for favourite button click
 mealsContainer.addEventListener('click', async (event) => {
   if (event.target.classList.contains('btn-favourite')) {
