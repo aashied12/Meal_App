@@ -44,13 +44,16 @@ mealsContainer.addEventListener('click', async (event) => {
 });
 
 // Event listener for favourite button click
-mealsContainer.addEventListener('click', (event) => {
+mealsContainer.addEventListener('click', async (event) => {
   if (event.target.classList.contains('btn-favourite')) {
     const mealElement = event.target.closest('.meal');
     const mealID = mealElement.getAttribute('data-mealid');
 
     // Add meal to favourites
     addMealToFavourites(mealID);
+
+    // Update the UI
+    updateFavouritesUI();
   }
 });
 
@@ -96,7 +99,7 @@ function displayMealDetail(mealId) {
     .then(data => {
       const meal = data.meals[0];
       const mealDetailContainer = document.getElementById("meal-detail-container");
-      
+
       // Create HTML elements for the meal detail
       const mealDetail = document.createElement("div");
       mealDetail.classList.add("meal-detail");
@@ -104,8 +107,9 @@ function displayMealDetail(mealId) {
         <h2>${meal.strMeal}</h2>
         <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
         <p>${meal.strInstructions}</p>
+        <button class="btn-favourite" data-mealid="${meal.idMeal}">Add to favourites</button>
       `;
-      
+
       // Add the meal detail to the container
       mealDetailContainer.innerHTML = "";
       mealDetailContainer.appendChild(mealDetail);
