@@ -4,6 +4,7 @@ const searchInput = document.querySelector('#search-input');
 const mealsContainer = document.querySelector('#meals');
 const resultHeading = document.querySelector('#result-heading');
 const singleMealContainer = document.querySelector('#single-meal');
+const favouriteMealsContainer = document.querySelector('#favourite-meals');
 
 // Event listener for search form submit
 searchForm.addEventListener('submit', async (event) => {
@@ -42,6 +43,17 @@ mealsContainer.addEventListener('click', async (event) => {
   }
 });
 
+// Event listener for favourite button click
+mealsContainer.addEventListener('click', (event) => {
+  if (event.target.classList.contains('btn-favourite')) {
+    const mealElement = event.target.closest('.meal');
+    const mealID = mealElement.getAttribute('data-mealid');
+
+    // Add meal to favourites
+    addMealToFavourites(mealID);
+  }
+});
+
 // Get meals by search query
 async function getMealsBySearch(query) {
   const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
@@ -64,10 +76,11 @@ function displayMeals(meals) {
     resultHeading.innerHTML = `<h2>Search results for '${searchInput.value}':</h2>`;
     meals.forEach((meal) => {
       const mealElement = `
-        <div class="meal">
+        <div class="meal" data-mealid="${meal.idMeal}">
           <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
-          <div class="meal-info" data-mealid="${meal.idMeal}">
+          <div class="meal-info">
             <h3>${meal.strMeal}</h3>
+            <button class="btn-favourite"><i class="far fa-heart"></i></button>
           </div>
         </div>
       `;
@@ -77,71 +90,28 @@ function displayMeals(meals) {
 }
 
 // Display meal detail
-function displayMealDetail(meal) {
-  // Create an array of ingredients and their measures
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    if (meal[`strIngredient${i}`]) {
-      ingredients.push(`${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`);
-    } else {
-      break;
-    }
-  }
-
-  // Create HTML for meal detail
-  const mealDetail = document.createElement('div');
-  mealDetail.classList.add('meal-detail');
-
-  // Create HTML for meal name and image
-  const nameAndImage = document.createElement('div');
-  nameAndImage.classList.add('name-and-image');
-  nameAndImage.innerHTML = `<img src="${meal.strMealThumb}" alt="${meal.strMeal}"> <h2>${meal.strMeal}</h2>`;
-  mealDetail.appendChild(nameAndImage);
-
-  // Create HTML for meal information
-  const information = document.createElement('div');
-  information.classList.add('information');
-  information.innerHTML = `
-    <p><strong>Category:</strong> ${meal.strCategory}</p>
-    <p><strong>Area:</strong> ${meal.strArea}</p>
-    <h3>Ingredients:</h3>
-    <ul>
-      ${ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('')}
-    </ul>
-    <h3>Instructions:</h3>
-    <p>${meal.strInstructions}</p>
-  `;
-  mealDetail.appendChild(information);
-
-  // Display meal detail in the DOM
-  singleMealContainer.innerHTML = '';
-  singleMealContainer.appendChild(mealDetail);
+function displayMealDetail(mealId) {
+  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
+    .then(response => response.json())
+    .then(data => {
+      const meal = data.meals[0];
+      const mealDetailContainer = document.getElementById("meal-detail-container");
+      
+      // Create HTML elements for the meal detail
+      const mealDetail = document.createElement("div");
+      mealDetail.classList.add("meal-detail");
+      mealDetail.innerHTML = `
+        <h2>${meal.strMeal}</h2>
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+        <p>${meal.strInstructions}</p>
+      `;
+      
+      // Add the meal detail to the container
+      mealDetailContainer.innerHTML = "";
+      mealDetailContainer.appendChild(mealDetail);
+    })
+    .catch(error => {
+      console.error(`Error fetching meal detail: ${error}`);
+    });
 }
 
-// Get a reference to the meal container element
-const mealContainer = document.getElementById('meal-container');
-
-// Add an event listener for clicks on the meal container
-mealContainer.addEventListener('click', mealContainerClicked);
-
-// Function to handle clicks on the meal container
-function mealContainerClicked(event) {
-  // Check if the click target was a meal card
-  if (event.target.classList.contains('meal-card')) {
-    // Get the meal ID from the data attribute
-    const mealId = event.target.dataset.mealId;
-
-    // Fetch the meal details from the API
-    fetch(`https://api.mealsdb.com/lookup.php?i=${mealId}`)
-      .then(response => response.json())
-      .then(data => {
-        // Display the meal details
-        console.log(data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-}
-
-     
