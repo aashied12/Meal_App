@@ -60,29 +60,40 @@ async function getMealsBySearch(query) {
 async function getMealByID(id) {
   const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
   const data = await response.json();
-  return data.meals[0];
+  return data.meals || [];
 }
 
+
 // Display meals
-function displayMeals(meals) {
-  if (meals === null) {
-    resultHeading.innerHTML = `<p>There are no search results. Please try again!</p>`;
-  } else {
-    resultHeading.innerHTML = `<h2>Search results for '${searchInput.value}':</h2>`;
-    meals.forEach((meal) => {
-      const mealElement = `
-        <div class="meal" data-mealid="${meal.idMeal}">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
-          <div class="meal-info">
-            <h3>${meal.strMeal}</h3>
-            <button class="btn-favourite"><i class="far fa-heart"></i></button>
-          </div>
-        </div>
+function displayMealDetail(mealId) {
+  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
+    .then(response => response.json())
+    .then(data => {
+      const meal = data.meals[0];
+      if (!meal) {
+        throw new Error(`No meal found with ID ${mealId}`);
+      }
+      const mealDetailContainer = document.getElementById("meal-detail-container");
+
+      // Create HTML elements for the meal detail
+      const mealDetail = document.createElement("div");
+      mealDetail.classList.add("meal-detail");
+      mealDetail.innerHTML = `
+        <h2>${meal.strMeal}</h2>
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+        <p>${meal.strInstructions}</p>
+        <button class="btn-favourite" data-mealid="${meal.idMeal}">Add to favourites</button>
       `;
-      mealsContainer.insertAdjacentHTML('beforeend', mealElement);
+
+      // Add the meal detail to the container
+      mealDetailContainer.innerHTML = "";
+      mealDetailContainer.appendChild(mealDetail);
+    })
+    .catch(error => {
+      console.error(`Error fetching meal detail: ${error}`);
     });
-  }
 }
+
 
 // Display meal detail
 function displayMealDetail(mealId) {
