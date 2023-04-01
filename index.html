@@ -25,21 +25,19 @@
 
   <div class="container my-4">
     <h1 class="text-center">Meal App</h1>
-    <div class="row my-4">
-      <div class="col-md-6">
-        <input type="text" class="form-control mb-2" placeholder="Search meal" id="searchInput">
+    <form id="search-form">
+      <div class="row my-4">
+        <div class="col-md-6">
+          <input type="text" class="form-control mb-2" placeholder="Search meal" id="search-input">
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-primary mb-2" type="submit" id="search-btn">Search</button>
+        </div>
       </div>
-      <div class="col-md-6">
-        <button class="btn btn-primary mb-2" id="searchBtn">Search</button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <ul class="list-group" id="searchResults">
-        </ul>
-      </div>
-    </div>
+    </form>
+    <div id="result-heading"></div>
+    <div id="meals" class="row"></div>
+    <div id="single-meal"></div>
   </div>
 
   <script src="app.js"></script>
