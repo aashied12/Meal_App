@@ -99,25 +99,49 @@ function displayMealDetail(meal) {
   mealDetail.appendChild(nameAndImage);
 
   // Create HTML for meal information
-const information = document.createElement('div');
-information.classList.add('information');
-information.innerHTML = `<h3>Instructions</h3> <p>${meal.strInstructions}</p> <h3>Ingredients</h3>`;
+  const information = document.createElement('div');
+  information.classList.add('information');
+  information.innerHTML = `
+    <p><strong>Category:</strong> ${meal.strCategory}</p>
+    <p><strong>Area:</strong> ${meal.strArea}</p>
+    <h3>Ingredients:</h3>
+    <ul>
+      ${ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('')}
+    </ul>
+    <h3>Instructions:</h3>
+    <p>${meal.strInstructions}</p>
+  `;
+  mealDetail.appendChild(information);
 
-// Create HTML for meal ingredients
-const ingredientsList = document.createElement('ul');
-ingredientsList.classList.add('ingredients');
-for (let i = 1; i <= 20; i++) {
-  if (meal[`strIngredient${i}`]) {
-    const ingredientItem = document.createElement('li');
-    ingredientItem.textContent = `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`;
-    ingredientsList.appendChild(ingredientItem);
-  } else {
-    break;
+  // Display meal detail in the DOM
+  singleMealContainer.innerHTML = '';
+  singleMealContainer.appendChild(mealDetail);
+}
+
+// Get a reference to the meal container element
+const mealContainer = document.getElementById('meal-container');
+
+// Add an event listener for clicks on the meal container
+mealContainer.addEventListener('click', mealContainerClicked);
+
+// Function to handle clicks on the meal container
+function mealContainerClicked(event) {
+  // Check if the click target was a meal card
+  if (event.target.classList.contains('meal-card')) {
+    // Get the meal ID from the data attribute
+    const mealId = event.target.dataset.mealId;
+
+    // Fetch the meal details from the API
+    fetch(`https://api.mealsdb.com/lookup.php?i=${mealId}`)
+      .then(response => response.json())
+      .then(data => {
+        // Display the meal details
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 }
-information.appendChild(ingredientsList);
 
-mealDetail.appendChild(information);
-
-return mealDetail;
-}
+     
