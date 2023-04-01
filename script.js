@@ -28,7 +28,7 @@ searchForm.addEventListener('submit', async (event) => {
 
 // Event listener for meal container click
 mealsContainer.addEventListener('click', async (event) => {
-  console.log(event.path);
+	console.log(event.path);
   const mealInfo = event.path.find((item) => {
     if (item.classList) {
       return item.classList.contains('meal-info');
@@ -119,4 +119,65 @@ function displayMealDetail(mealId) {
       console.error(`Error fetching meal detail: ${error}`);
     });
 }
+
+// Add meal to favourites
+function addMealToFavourites(mealID) {
+  // Get favourite meals from local storage
+  const favouriteMeals = JSON.parse(localStorage.getItem('favouriteMeals')) || [];
+
+  // Check if meal is already in favourites
+  const existingMeal = favouriteMeals.find((meal) => meal.idMeal === mealID);
+  if (existingMeal) {
+    return;
+  }
+
+  // Fetch meal details and add to favourites
+  getMealByID(mealID)
+    .then((meal) => {
+      favouriteMeals.push(meal);
+
+      // Save favourite meals to local storage
+      localStorage.setItem('favouriteMeals', JSON.stringify(favouriteMeals));
+    })
+    .catch((error) => {
+      console.error(`Error adding meal to favourites: ${error}`);
+    });
+}
+
+function updateFavouritesUI() {
+  // Get favourites from local storage
+  const favouriteMeals = JSON.parse(localStorage.getItem('favouriteMeals')) || [];
+
+  // Clear previous favourites
+  favouriteMealsContainer.innerHTML = '';
+
+  // Add favourites to UI
+  if (favouriteMeals.length > 0) {
+    favouriteMeals.forEach((mealID) => {
+      getMealByID(mealID)
+        .then((meal) => {
+          const favouriteMealElement = `
+            <div class="meal">
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+              <div class="meal-info">
+                <h3>${meal.strMeal}</h3>
+                <button class="btn-unfavourite" data-mealid="${meal.idMeal}"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+          `;
+          favouriteMealsContainer.insertAdjacentHTML('beforeend', favouriteMealElement);
+        })
+        .catch((error) => {
+          console.error(`Error fetching meal detail: ${error}`);
+        });
+    });
+  } else {
+    const noFavouritesElement = `
+      <p>You haven't added any favourites yet.</p>
+    `;
+    favouriteMealsContainer.innerHTML = noFavouritesElement;
+  }
+}
+
+
 
