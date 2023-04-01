@@ -6,23 +6,42 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h721XnFWxIzBvldFeFyXM1jwJkQ5VGYMvDTEo" crossorigin="anonymous">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Meal App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">My Favourites</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="container my-4">
     <h1 class="text-center">Meal App</h1>
     <div class="row my-4">
       <div class="col-md-6">
-        <input type="text" class="form-control mb-2" placeholder="Enter meal name" id="mealInput">
+        <input type="text" class="form-control mb-2" placeholder="Search meal" id="searchInput">
       </div>
       <div class="col-md-6">
-        <button class="btn btn-primary mb-2" id="addMealBtn">Add Meal</button>
+        <button class="btn btn-primary mb-2" id="searchBtn">Search</button>
       </div>
     </div>
+
     <div class="row">
       <div class="col-md-12">
-        <ul class="list-group" id="mealList">
+        <ul class="list-group" id="searchResults">
         </ul>
       </div>
     </div>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
