@@ -1,148 +1,152 @@
-// API endpoint URLs
-const SEARCH_API_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-const DETAILS_API_URL = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
-
-// Search input and meals container
-const searchInput = document.querySelector('#searchInput');
+// Get elements from the DOM
+const searchForm = document.querySelector('#search-form');
+const searchInput = document.querySelector('#search-input');
 const mealsContainer = document.querySelector('#meals');
+const resultHeading = document.querySelector('#result-heading');
+const singleMealContainer = document.querySelector('#single-meal');
 
-// Favourites list and button
-const favouritesList = document.querySelector('#favourites');
-const favButton = document.querySelector('#favButton');
+// Event listener for search form submit
+searchForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-// Array to store favourite meals
-let favourites = [];
+  // Clear previous search results
+  mealsContainer.innerHTML = '';
 
-// Function to render meals in the meals container
-function renderMeals(meals) {
-  mealsContainer.innerHTML = meals.map(meal => `
-    <div class="col-md-4">
-      <div class="card mb-4 shadow-sm">
-        <img src="${meal.strMealThumb}" class="card-img-top" alt="${meal.strMeal}">
-        <div class="card-body">
-          <h5 class="card-title">${meal.strMeal}</h5>
-          <p class="card-text">${meal.strInstructions.slice(0, 100)}...</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary details-button" data-mealid="${meal.idMeal}" data-toggle="modal" data-target="#mealModal">Details</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary favourite-button" data-mealid="${meal.idMeal}">Favourite</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
+  // Get search query
+  const query = searchInput.value.trim();
 
-// Function to fetch meals from API
-async function searchMeals(query) {
-  const response = await fetch(SEARCH_API_URL + query);
+  // Check if query is not empty
+  if (query !== '') {
+    // Fetch meals from API
+    const meals = await getMealsBySearch(query);
+
+    // Display meals
+    displayMeals(meals);
+  }
+});
+
+// Event listener for meal container click
+mealsContainer.addEventListener('click', async (event) => {
+  const mealInfo = event.path.find((item) => {
+    if (item.classList) {
+      return item.classList.contains('meal-info');
+    } else {
+      return false;
+    }
+  });
+
+  if (mealInfo) {
+    const mealID = mealInfo.getAttribute('data-mealid');
+    const meal = await getMealByID(mealID);
+    displayMealDetail(meal);
+  }
+});
+
+// Get meals by search query
+async function getMealsBySearch(query) {
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
   const data = await response.json();
   return data.meals;
 }
 
-// Function to fetch meal details from API
-async function getMealDetails(mealId) {
-  const response = await fetch(DETAILS_API_URL + mealId);
+// Get meal by ID
+async function getMealByID(id) {
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
   const data = await response.json();
   return data.meals[0];
 }
 
-// Function to render meal details in the modal
-function renderMealDetails(meal) {
-  const modalTitle = document.querySelector('#mealModalLabel');
-  const modalBody = document.querySelector('.modal-body');
-  const favButton = document.querySelector('#favButton');
-  modalTitle.textContent = meal.strMeal;
-  modalBody.innerHTML = `
-    <img src="${meal.strMealThumb}" class="img-fluid mb-3" alt="${meal.strMeal}">
-    <h4>Ingredients:</h4>
-    <ul class="list-group">
-      ${Array(20).fill().map((_, i) => {
-        if (meal[`strIngredient${i+1}`]) {
-          return `<li class="list-group-item">${meal[`strIngredient${i+1}`]} - ${meal[`strMeasure${i+1}`]}</li>`;
-        }
-        return '';
-      }).join('')}
-    </ul>
-    <h4>Instructions:</h4>
-    <p>${meal.strInstructions}</p>
-  `;
-  // Check if meal is already in favourites list
-  if (favourites.some(fav => fav.idMeal === meal.idMeal)) {
-    favButton.disabled = true;
+// Display meals
+function displayMeals(meals) {
+  if (meals === null) {
+    resultHeading.innerHTML = `<p>There are no search results. Please try again!</p>`;
   } else {
-    favButton.disabled = false;
+    resultHeading.innerHTML = `<h2>Search results for '${searchInput.value}':</h2>`;
+    meals.forEach((meal) => {
+      const mealElement = `
+        <div class="meal">
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+          <div class="meal-info" data-mealid="${meal.idMeal}">
+            <h3>${meal.strMeal}</h3>
+          </div>
+        </div>
+      `;
+      mealsContainer.insertAdjacentHTML('beforeend', mealElement);
+    });
   }
 }
+
+// Display meal detail
+function displayMealDetail(meal) {
+  // Create an array of ingredients and their measures
+  const ingredients = [];
+  for (let i = 1; i <= 20; i++) {
+    if (meal[`strIngredient${i}`]) {
+      ingredients.push(`${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`);
+    } else {
+      break;
+    }
+  }
+
+ // Create HTML for meal detail
+function createMealDetailHTML(meal) {
+const mealDetail = document.createElement('div');
+mealDetail.classList.add('meal-detail');
+
+// Create HTML for meal name and image
+const nameAndImage = document.createElement('div');
+nameAndImage.classList.add('name-and-image');
+nameAndImage.innerHTML = <img src="${meal.strMealThumb}" alt="${meal.strMeal}"> <h2>${meal.strMeal}</h2> ;
+mealDetail.appendChild(nameAndImage);
+
+// Create HTML for meal information
+const information = document.createElement('div');
+information.classList.add('information');
+information.innerHTML = <h3>Instructions</h3> <p>${meal.strInstructions}</p> <h3>Ingredients</h3> ;
+mealDetail.appendChild(information);
+  
+  
+// Create HTML for meal ingredients
+const ingredients = document.createElement('ul');
+ingredients.classList.add('ingredients');
+for (let i = 1; i <= 20; i++) {
+if (meal[strIngredient${i}]) {
+const ingredient = document.createElement('li');
+ingredient.textContent = ${meal[strIngredient${i}]} - ${meal[strMeasure${i}]};
+ingredients.appendChild(ingredient);
+} else {
+break;
+}
+}
+information.appendChild(ingredients);
+
+return mealDetail;
+}
+
+// Add event listener for meal click
+mealsContainer.addEventListener('click', async (event) => {
+if (event.target.classList.contains('meal')) {
+const mealId = event.target.dataset.id;
+const meal = await getMealById(mealId);
+const mealDetailHTML = createMealDetailHTML(meal);
+mealsContainer.innerHTML = '';
+mealsContainer.appendChild(mealDetailHTML);
+}
+});
 
 // Event listener for search input
 searchInput.addEventListener('input', async (event) => {
-  const query = event.target.value.trim();
-   if (query.length >= 3) {
-    const meals = await searchMeals(query);
-    renderSearchResults(meals);
-  } else {
-    searchResults.innerHTML = '';
-  }
-});
-
-    
-    
-// Function to handle favourite button click
-function handleFavouriteClick(mealId) {
-const meal = favourites.find(fav => fav.idMeal === mealId);
-if (meal) {
-favourites = favourites.filter(fav => fav.idMeal !== mealId);
+const query = event.target.value.trim();
+if (query.length > 0) {
+const meals = await searchMeals(query);
+renderMeals(meals);
 } else {
-favourites.push({ idMeal: mealId });
-}
-localStorage.setItem('favourites', JSON.stringify(favourites));
-renderFavourites();
-}
-
-// Function to render favourites list
-function renderFavourites() {
-favouritesList.innerHTML = favourites.map(fav => <li class="list-group-item"> <a href="#" class="text-danger remove-favourite" data-mealid="${fav.idMeal}">&times;</a> ${fav.idMeal} </li> ).join('');
-}
-
-// Event listener for favourites button click
-favButton.addEventListener('click', () => {
-const favModal = new bootstrap.Modal(document.querySelector('#favouritesModal'));
-favModal.show();
-});
-
-// Event listener for details button click
-document.addEventListener('click', async (event) => {
-if (event.target.classList.contains('details-button')) {
-const mealId = event.target.dataset.mealid;
-const meal = await getMealDetails(mealId);
-renderMealDetails(meal);
+mealsContainer.innerHTML = '';
 }
 });
 
-// Event listener for favourite button click
-document.addEventListener('click', (event) => {
-if (event.target.classList.contains('favourite-button')) {
-const mealId = event.target.dataset.mealid;
-handleFavouriteClick(mealId);
-event.target.disabled = true;
-}
-});
-
-// Event listener for remove favourite click
-document.addEventListener('click', (event) => {
-if (event.target.classList.contains('remove-favourite')) {
-const mealId = event.target.dataset.mealid;
-favourites = favourites.filter(fav => fav.idMeal !== mealId);
-localStorage.setItem('favourites', JSON.stringify(favourites));
-renderFavourites();
-}
-});
-
-// Load favourites from local storage
-const storedFavourites = localStorage.getItem('favourites');
-if (storedFavourites) {
-favourites = JSON.parse(storedFavourites);
-renderFavourites();
-}
+// Initialize page with popular meals
+(async function () {
+const popularMeals = await getPopularMeals();
+renderMeals(popularMeals);
+})();
