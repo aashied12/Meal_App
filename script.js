@@ -28,6 +28,7 @@ searchForm.addEventListener('submit', async (event) => {
 
 // Event listener for meal container click
 mealsContainer.addEventListener('click', async (event) => {
+  console.log(event.path);
   const mealInfo = event.path.find((item) => {
     if (item.classList) {
       return item.classList.contains('meal-info');
