@@ -136,13 +136,31 @@ mealsContainer.appendChild(mealDetailHTML);
 
 // Event listener for search input
 searchInput.addEventListener('input', async (event) => {
-const query = event.target.value.trim();
-if (query.length > 0) {
-const meals = await searchMeals(query);
-renderMeals(meals);
-} else {
-mealsContainer.innerHTML = '';
-}
+  const query = encodeURIComponent(event.target.value.trim());
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+  const data = await response.json();
+  searchResults.innerHTML = "";
+  if (data.meals) {
+    data.meals.forEach((meal) => {
+      const mealElement = document.createElement("div");
+      mealElement.classList.add("meal");
+      mealElement.innerHTML = `
+        <div class="meal-header">
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+        </div>
+        <div class="meal-body">
+          <h4>${meal.strMeal}</h4>
+          <button class="btn" onclick="addToFavorites('${meal.idMeal}')">Add to Favorites</button>
+        </div>
+      `;
+      mealElement.addEventListener("click", () => {
+        showMealDetails(meal.idMeal);
+      });
+      searchResults.appendChild(mealElement);
+    });
+  } else {
+    searchResults.innerHTML = "No results found.";
+  }
 });
 
 // Initialize page with popular meals
