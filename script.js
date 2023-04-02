@@ -65,10 +65,10 @@ return data.meals;
 }
 
 // Get meal by ID
-async function getMealByID(id) {
+async function getMealByID(mealID) {
   console.log("Inside async function");
-  console.log(id);
-const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${id}`);
+  console.log(mealID);
+const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${mealID}`);
 const data = await response.json();
 return data.meals || [];
 }
