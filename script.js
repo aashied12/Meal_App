@@ -60,7 +60,9 @@ updateFavouritesUI();
 async function getMealsBySearch(query) {
   console.log(query);
 const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
+  console.log("response",response);
 const data = await response.json();
+  console.log("data",data.meals);
 return data.meals;
 }
 
@@ -71,7 +73,7 @@ async function getMealByID(mealID) {
 const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${mealID}`);
   console.log("response",response);
 const data = await response.json();
-  console.log("data",data);
+  console.log("data",data.meals);
 return data.meals || [];
 }
 
