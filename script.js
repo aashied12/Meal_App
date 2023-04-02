@@ -38,7 +38,7 @@ const mealID = mealInfo.getAttribute('data-mealid');
   console.log("mealID", mealID);
 const meal = await getMealByID(mealID);
   console.log("meal", meal);
-displayMealDetail(meal);
+displayMealDetail(meal[0]);
 }
 });
 
@@ -127,7 +127,7 @@ function displayMeals(meals) {
   });
 }
 
-function displayMealDetail(meal) {
+function displayMealDetail(meal[0]) {
   // Create a new div element for the meal details
   const mealDetail = document.createElement('div');
   mealDetail.classList.add('meal-detail');
