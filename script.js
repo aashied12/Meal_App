@@ -31,7 +31,7 @@ displayMeals(meals);
 // Event listener for meal container click
 mealsContainer.addEventListener('click', async (event) => {
 const mealInfo = event.target.closest('.meal').querySelector('.meal-info');
-  console.log("mealInfo");
+  console.log("mealInfo",mealInfo);
 if (mealInfo) {
   console.log("Inside if");
 const mealID = mealInfo.getAttribute('data-mealid');
@@ -69,7 +69,9 @@ async function getMealByID(mealID) {
   console.log("Inside async function");
   console.log(mealID);
 const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${mealID}`);
+  console.log("response",response);
 const data = await response.json();
+  console.log("data",data);
 return data.meals || [];
 }
 
