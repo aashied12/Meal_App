@@ -28,7 +28,7 @@ const mealID = mealInfo.getAttribute('data-mealid');
   console.log("mealID",mealID);
 const meal = await getMealByID(mealID);
   console.log("meal",meal);
-displayMealDetail(meal);
+displayMealDetail(mealID);
 }
 });
 // Event listener for favourite button click
