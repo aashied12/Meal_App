@@ -38,7 +38,7 @@ const mealID = mealInfo.getAttribute('data-mealid');
   console.log("mealID", mealID);
 const meal = await getMealByID(mealID);
   console.log("meal", meal);
-displayMealDetail(mealID);
+displayMealDetail(meal);
 }
 });
 
@@ -70,7 +70,7 @@ return data.meals;
 async function getMealByID(mealID) {
   console.log("Inside async function");
   console.log(mealID);
-const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${mealID}`);
+const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`);
   console.log("response",response);
 const data = await response.json();
   console.log("data",data.meals);
@@ -78,6 +78,7 @@ return data.meals || [];
 }
 
 
+// Display meals
 // Display meals
 function displayMeals(meals) {
   // Check if any meals were found
@@ -114,37 +115,43 @@ function displayMeals(meals) {
     // Add the meal to the container
     mealsContainer.appendChild(mealElement);
   });
-}
 
-
-
-
-// Display meal detail
-function displayMealDetail(mealId) {
-  console.log(mealId);
-  getMealByID(mealId)
-    .then(meal => {
-      const mealDetailContainer = document.getElementById("meal-detail-container");
-
-      // Create HTML elements for the meal detail
-      const mealDetail = document.createElement("div");
-      mealDetail.classList.add("meal-detail");
-      mealDetail.innerHTML = `
-        <h2>${meal.strMeal}</h2>
-        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-        <p>${meal.strInstructions}</p>
-        <button class="btn-favourite" data-mealid="${meal.idMeal}">Add to favourites</button>
-      `;
-
-      // Add the meal detail to the container
-      mealDetailContainer.innerHTML = "";
-      mealDetailContainer.appendChild(mealDetail);
-    })
-    .catch(error => {
-      console.error(`Error fetching meal detail: ${error}`);
+  // Add event listener for each meal to display its detail
+  const mealElements = document.querySelectorAll('.meal');
+  mealElements.forEach(mealElement => {
+    mealElement.addEventListener('click', async (event) => {
+      const mealID = mealElement.querySelector('.meal-info').getAttribute('data-mealid');
+      const meal = await getMealByID(mealID);
+      displayMealDetail(meal[0]);
     });
+  });
 }
 
+function displayMealDetail(meal) {
+  // Create a new div element for the meal details
+  const mealDetail = document.createElement('div');
+  mealDetail.classList.add('meal-detail');
+
+  // Create the HTML for the meal details
+  const html = `
+    <h2>${meal.name}</h2>
+    <img src="${meal.image}" alt="${meal.name}">
+    <p>${meal.description}</p>
+    <ul>
+      <li>Calories: ${meal.calories}</li>
+      <li>Protein: ${meal.protein}g</li>
+      <li>Carbohydrates: ${meal.carbs}g</li>
+      <li>Fat: ${meal.fat}g</li>
+    </ul>
+  `;
+
+  // Set the HTML of the meal detail element
+  mealDetail.innerHTML = html;
+
+  // Add the meal detail element to the page
+  const mealContainer = document.querySelector('.meal-container');
+  mealContainer.appendChild(mealDetail);
+}
 
 
 // Add meal to favourites
@@ -205,6 +212,3 @@ function updateFavouritesUI() {
     favouriteMealsContainer.innerHTML = noFavouritesElement;
   }
 }
-
-
-
