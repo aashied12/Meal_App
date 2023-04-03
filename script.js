@@ -107,7 +107,7 @@ function displayMealDetail(mealId) {
       // Store the meal details in the session storage
       sessionStorage.setItem("mealDetails", JSON.stringify(mealDetails));
       // Redirect to the meal details page
-      window.location.href = "meal_details.html";
+      window.location.href = "meal-details.html";
     })
     .catch(error => {
       console.error(error);
