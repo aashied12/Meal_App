@@ -91,7 +91,6 @@ function displayMeals(meals) {
 
 // Display meal detail
 function displayMealDetail(mealId) {
-  console.log(mealId);
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
     .then(response => response.json())
     .then(data => {
@@ -99,24 +98,40 @@ function displayMealDetail(mealId) {
       if (!meal) {
         throw new Error(`No meal found with ID ${mealId}`);
       }
-      const mealDetailContainer = document.getElementById("meal-detail-container");
-      // Create HTML elements for the meal detail
-      const mealDetail = document.createElement("div");
-      mealDetail.classList.add("meal-detail");
-      mealDetail.innerHTML = `
-        <h2>${meal.strMeal}</h2>
-        <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-        <p>${meal.strInstructions}</p>
-        <button class="btn-favourite" data-mealid="${meal.idMeal}">Add to favourites</button>
-      `;
-      // Add the meal detail to the container
-      mealDetailContainer.innerHTML = "";
-      mealDetailContainer.appendChild(mealDetail);
+      const mealDetails = {
+        id: meal.idMeal,
+        name: meal.strMeal,
+        image: meal.strMealThumb,
+        instructions: meal.strInstructions,
+      };
+      // Store the meal details in the session storage
+      sessionStorage.setItem("mealDetails", JSON.stringify(mealDetails));
+      // Redirect to the meal details page
+      window.location.href = "meal-details.html";
     })
     .catch(error => {
-      console.error(`Error fetching meal detail: ${error}`);
+      console.error(error);
     });
 }
+
+// Get the meal details from the session storage
+const mealDetails = JSON.parse(sessionStorage.getItem("mealDetails"));
+if (!mealDetails) {
+  throw new Error("No meal details found");
+}
+// Display the meal details
+const mealDetailContainer = document.getElementById("meal-detail-container");
+mealDetailContainer.innerHTML = `
+  <div class="meal-detail">
+    <h2>${mealDetails.name}</h2>
+    <img src="${mealDetails.image}" alt="${mealDetails.name}">
+    <p>${mealDetails.instructions}</p>
+    <button class="btn-favourite" data-mealid="${mealDetails.id}">Add to favourites</button>
+  </div>
+`;
+
+
+
 // Add meal to favourites
 function addMealToFavourites(mealID) {
   // Get favourite meals from local storage
