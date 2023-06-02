@@ -1,14 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
+  const searchButton = document.getElementById('searchButton');
   const mealResults = document.getElementById('mealResults');
+  const favoritesButton = document.getElementById('favoritesButton');
   const favoritesList = document.getElementById('favoritesList');
+  const favoritesPage = document.getElementById('favoritesPage');
 
-  searchInput.addEventListener('input', handleSearchInput);
+  searchButton.addEventListener('click', handleSearch);
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearch();
+    }
+  });
+
   mealResults.addEventListener('click', handleAddToFavorites);
+  favoritesButton.addEventListener('click', showFavoritesPage);
 
-  async function handleSearchInput(event) {
-    const searchTerm = event.target.value;
+  async function handleSearch() {
+    const searchTerm = searchInput.value;
     if (searchTerm.trim() !== '') {
       const meals = await searchMeals(searchTerm);
       displayMeals(meals);
@@ -58,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     titleContainer.appendChild(title);
 
     const heartButton = document.createElement('button');
-    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
+    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2');
     heartButton.innerHTML = '<i class="bi bi-heart"></i>';
     heartButton.dataset.mealId = meal.idMeal;
     titleContainer.appendChild(heartButton);
@@ -82,14 +93,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function createFavoriteItem(mealId, mealTitle) {
-    const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-    listItem.innerHTML = `
-      <span>${mealTitle}</span>
-      <button class="btn btn-outline-danger btn-sm" data-meal-id="${mealId}">
-        <i class="bi bi-trash"></i>
-      </button>
-    `;
-    return listItem;
+  const listItem = document.createElement('li');
+  listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+  listItem.innerHTML = `
+    <span>${mealTitle}</span>
+    <button class="btn btn-outline-danger btn-sm" data-meal-id="${mealId}">
+      <i class="bi bi-trash"></i>
+    </button>
+  `;
+  return listItem;
+}
+
+function showFavoritesPage() {
+  mealResults.innerHTML = '';
+  favoritesPage.style.display = 'block';
+}
+
+favoritesList.addEventListener('click', handleRemoveFromFavorites);
+
+function handleRemoveFromFavorites(event) {
+  if (event.target.tagName === 'BUTTON') {
+    const mealId = event.target.dataset.mealId;
+    const favoriteItem = event.target.closest('.list-group-item');
+    favoritesList.removeChild(favoriteItem);
   }
+}
 });
