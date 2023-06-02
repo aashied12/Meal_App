@@ -16,6 +16,7 @@
       <div class="mb-3">
         <label for="searchInput" class="form-label">Search for a meal:</label>
         <input type="text" class="form-control" id="searchInput" placeholder="Enter a meal name">
+        <button id="searchButton" class="btn btn-primary" type="button">Search</button>
       </div>
     </form>
     <div id="mealResults"></div>
@@ -24,6 +25,15 @@
   <div class="container mt-4">
     <h2>Favorites</h2>
     <ul id="favoritesList" class="list-group"></ul>
+  </div>
+
+  <button id="favoritesButton" class="btn btn-primary float-end">Favorites</button>
+
+  <div id="favoritesPage" style="display: none;">
+    <div class="container mt-4">
+      <h2>Favorites</h2>
+      <ul id="favoritesList" class="list-group"></ul>
+    </div>
   </div>
 
   <script src="script.js"></script>
