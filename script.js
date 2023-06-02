@@ -4,9 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchButton = document.getElementById('searchButton');
   const mealResults = document.getElementById('mealResults');
   const favoritesButton = document.getElementById('favoritesButton');
-  const favoritesList = document.getElementById('favoritesList');
-  const favoritesPage = document.getElementById('favoritesPage');
-
+  
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
@@ -16,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   mealResults.addEventListener('click', handleAddToFavorites);
-  favoritesButton.addEventListener('click', showFavoritesPage);
+  favoritesButton.addEventListener('click', redirectToFavorites);
 
   async function handleSearch() {
     const searchTerm = searchInput.value;
@@ -88,34 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const mealCard = event.target.closest('.card');
       const mealTitle = mealCard.querySelector('.card-title').textContent;
       const favoriteItem = createFavoriteItem(mealId, mealTitle);
-      favoritesList.appendChild(favoriteItem);
+      localStorage.setItem(mealId, mealTitle);
     }
   }
 
-  function createFavoriteItem(mealId, mealTitle) {
-  const listItem = document.createElement('li');
-  listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-  listItem.innerHTML = `
-    <span>${mealTitle}</span>
-    <button class="btn btn-outline-danger btn-sm" data-meal-id="${mealId}">
-      <i class="bi bi-trash"></i>
-    </button>
-  `;
-  return listItem;
-}
-
-function showFavoritesPage() {
-  mealResults.innerHTML = '';
-  favoritesPage.style.display = 'block';
-}
-
-favoritesList.addEventListener('click', handleRemoveFromFavorites);
-
-function handleRemoveFromFavorites(event) {
-  if (event.target.tagName === 'BUTTON') {
-    const mealId = event.target.dataset.mealId;
-    const favoriteItem = event.target.closest('.list-group-item');
-    favoritesList.removeChild(favoriteItem);
+  function redirectToFavorites() {
+    window.location.href = 'favorites.html';
   }
-}
 });
