@@ -1,41 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meal App</title>
-  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Meal App</a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Search Meals</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">My favourite meals</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <div class="container mt-5">
-    <form id="search-form" class="mb-4">
-      <div class="form-group">
-        <label for="search-input">Search Meals</label>
-        <input type="text" id="search-input" class="form-control">
-      </div>
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <h2 id="result-heading"></h2>
-    <div id="meals" class="row"></div>
-  </div>
-  <div class="container mt-5">
-    <h2>My favourite meals</h2>
-    <ul id="favourite-meals"></ul>
-  </div>
-  <div id="single-meal"></div>
-  <div id="meal-detail-container"></div>
-  <script src="script.js"></script>
-</body>
-</html>
