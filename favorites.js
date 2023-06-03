@@ -4,14 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
   displayFavorites();
 
   function displayFavorites() {
-    favoritesList.innerHTML = '';
-    for (let i = 0; i < localStorage.length; i++) {
-      const mealId = localStorage.key(i);
-      const mealTitle = localStorage.getItem(mealId);
-      const favoriteItem = createFavoriteItem(mealId, mealTitle);
-      favoritesList.appendChild(favoriteItem);
-    }
+  favoritesList.innerHTML = '';
+
+  // Retrieve the favorites from local storage and parse the JSON string
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+  // Iterate over the favorite meals and create the list items
+  for (let i = 0; i < favorites.length; i++) {
+    const meal = favorites[i];
+    const mealId = meal.idMeal;
+    const mealTitle = meal.strMeal;
+    const mealImage = meal.strMealThumb;
+
+    const favoriteItem = createFavoriteItem(mealId, mealTitle, mealImage);
+    favoritesList.appendChild(favoriteItem);
   }
+}
+
 
   function createFavoriteItem(mealId, mealTitle, mealImage) {
   const listItem = document.createElement('li');
