@@ -87,13 +87,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleAddToFavorites(event) {
-    if (event.target.tagName === 'BUTTON') {
-      const mealId = event.target.dataset.mealId;
-      const mealCard = event.target.closest('.card');
-      const mealTitle = mealCard.querySelector('.card-title').textContent;
+  if (event.target.tagName === 'BUTTON') {
+    const mealId = event.target.dataset.mealId;
+    const mealCard = event.target.closest('.card');
+    const mealTitle = mealCard.querySelector('.card-title').textContent;
+
+    // Check if the meal is already in the favorites list
+    const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
+    if (!existingMeal) {
       addFavorite(mealId, mealTitle);
+      event.target.textContent = 'Added to Favorites';
+      event.target.classList.remove('btn-outline-danger');
+      event.target.classList.add('btn-success');
     }
   }
+}
+
 
     function addFavorite(mealId, mealTitle) {
   // Retrieve the favorites from local storage and parse the JSON string
