@@ -146,6 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return item;
   }
+  function redirectToFavorites() {
+  window.location.href = 'favorites.html';
+}
+
 
   // Update the favorites page on load
   displayFavorites();
