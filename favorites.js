@@ -60,8 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const image = document.createElement('img');
   image.src = meal.strMealThumb;
   image.alt = meal.strMeal;
-  // Add a custom CSS class to the image element
-  image.classList.add('favorite-item-image');
+  // Set the image width and height
+  image.style.width = '150px';
+  image.style.height = '150px';
   item.appendChild(image);
 
   const title = document.createElement('h5');
