@@ -1,47 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const favoritesList = document.getElementById('favoritesList');
-
-  displayFavorites();
-
-  function displayFavorites() {
-  favoritesList.innerHTML = '';
-
-  // Retrieve the favorites from local storage and parse the JSON string
-  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-  // Iterate over the favorite meals and create the list items
-  for (let i = 0; i < favorites.length; i++) {
-    const meal = favorites[i];
-    const mealId = meal.idMeal;
-    const mealTitle = meal.strMeal;
-    const mealImage = meal.strMealThumb;
-
-    const favoriteItem = createFavoriteItem(mealId, mealTitle, mealImage);
-    favoritesList.appendChild(favoriteItem);
+  // Function to retrieve the favorites from local storage
+  function getFavorites() {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    return favorites;
   }
-}
 
+  // Function to display the favorites on the favorites page
+  function displayFavorites() {
+    const favoritesList = document.getElementById('favoritesList');
+    const favorites = getFavorites();
+
+    if (favorites.length === 0) {
+      favoritesList.innerHTML = '<p>No favorite meals found.</p>';
+      return;
+    }
+
+    favoritesList.innerHTML = '';
+    favorites.forEach((meal) => {
+      const favoriteItem = createFavoriteItem(meal);
+      favoritesList.appendChild(favoriteItem);
+    });
+  }
 
   // Function to create a favorite item element
-function createFavoriteItem(meal) {
-  const item = document.createElement('div');
-  item.classList.add('favorite-item');
+  function createFavoriteItem(meal) {
+    const item = document.createElement('div');
+    item.classList.add('favorite-item');
 
-  const image = document.createElement('img');
-  image.src = meal.strMealThumb;
-  image.alt = meal.strMeal;
-  item.appendChild(image);
+    const image = document.createElement('img');
+    image.src = meal.strMealThumb;
+    image.alt = meal.strMeal;
+    item.appendChild(image);
 
-  const title = document.createElement('h5');
-  title.textContent = meal.strMeal;
-  item.appendChild(title);
+    const title = document.createElement('h5');
+    title.textContent = meal.strMeal;
+    item.appendChild(title);
 
-  return item;
-}
-
-
-
-  function removeFavorite(mealId) {
-    localStorage.removeItem(mealId);
+    return item;
   }
+
+  // Update the favorites page on load
+  displayFavorites();
 });
