@@ -18,3 +18,7 @@
 #favoritesList {
   margin-top: 20px;
 }
+.favorite-item-image {
+  width: 40px;
+  height: 40px;
+}
