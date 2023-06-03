@@ -60,9 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const image = document.createElement('img');
   image.src = meal.strMealThumb;
   image.alt = meal.strMeal;
-  // Apply CSS styles to adjust the image dimensions
-  image.style.width = '40px';
-  image.style.height = '40px';
+  // Add a custom CSS class to the image element
+  image.classList.add('favorite-item-image');
   item.appendChild(image);
 
   const title = document.createElement('h5');
@@ -77,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   return item;
 }
+
 
   // Update the favorites page on load
   displayFavorites();
