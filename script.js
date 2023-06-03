@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     titleContainer.appendChild(title);
 
     const heartButton = document.createElement('button');
-    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2');
-    heartButton.innerHTML = '<i class="bi bi-heart"></i>';
+    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
+    heartButton.textContent = 'Add to Favorites';
     heartButton.dataset.mealId = meal.idMeal;
     titleContainer.appendChild(heartButton);
 
