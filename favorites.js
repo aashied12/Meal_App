@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Function to retrieve the favorites from local storage
-    function getFavorites() {
+  function getFavorites() {
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
   return favorites;
 }
@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // Function to create a favorite item element
-  function createFavoriteItem(meal) {
+  // Function to create a favorite item element
+function createFavoriteItem(meal) {
   const item = document.createElement('div');
   item.classList.add('favorite-item');
 
@@ -71,7 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const removeButton = document.createElement('button');
   removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2');
-  removeButton.innerHTML = '<i class="bi bi-trash"></i>';
+  
+  const trashIcon = document.createElement('i');
+  trashIcon.classList.add('bi', 'bi-trash');
+  
+  removeButton.appendChild(trashIcon);
   removeButton.dataset.mealId = meal.idMeal;
   item.appendChild(removeButton);
 
