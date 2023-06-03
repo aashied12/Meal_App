@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   item.appendChild(title);
 
   const removeButton = document.createElement('button');
-  removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2');
+  removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
   removeButton.textContent = 'Remove from Favorites';
   removeButton.dataset.mealId = meal.idMeal;
   item.appendChild(removeButton);
