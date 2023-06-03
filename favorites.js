@@ -22,6 +22,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Add event listener for remove button clicks
+  document.addEventListener('click', handleRemoveFavorite);
+
+  function handleRemoveFavorite(event) {
+    if (event.target.tagName === 'BUTTON') {
+      const mealId = event.target.dataset.mealId;
+      removeFavorite(mealId);
+    }
+  }
+
+  // Function to remove a favorite from the favorites list
+  function removeFavorite(mealId) {
+    // Retrieve the favorites from local storage and parse the JSON string
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    // Find the index of the meal in the favorites list
+    const index = favorites.findIndex((meal) => meal.idMeal === mealId);
+    if (index !== -1) {
+      // Remove the meal from the favorites list
+      favorites.splice(index, 1);
+
+      // Update the favorites in local storage
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+
+      // Refresh the favorites list
+      displayFavorites();
+    }
+  }
+
   // Function to create a favorite item element
   function createFavoriteItem(meal) {
     const item = document.createElement('div');
