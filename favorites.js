@@ -22,32 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 
-  function createFavoriteItem(mealId, mealTitle, mealImage) {
-  const listItem = document.createElement('li');
-  listItem.classList.add('list-group-item');
+  // Function to create a favorite item element
+function createFavoriteItem(meal) {
+  const item = document.createElement('div');
+  item.classList.add('favorite-item');
 
-  const mealImageElement = document.createElement('img');
-  mealImageElement.src = mealImage;
-  mealImageElement.alt = mealTitle;
-  mealImageElement.classList.add('meal-image');
-  listItem.appendChild(mealImageElement);
+  const image = document.createElement('img');
+  image.src = meal.strMealThumb;
+  image.alt = meal.strMeal;
+  item.appendChild(image);
 
-  const mealTitleElement = document.createElement('span');
-  mealTitleElement.classList.add('meal-title');
-  mealTitleElement.textContent = mealTitle;
-  listItem.appendChild(mealTitleElement);
+  const title = document.createElement('h5');
+  title.textContent = meal.strMeal;
+  item.appendChild(title);
 
-  const removeButton = document.createElement('button');
-  removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'float-end');
-  removeButton.innerHTML = '<i class="bi bi-trash"></i>';
-  removeButton.addEventListener('click', () => {
-    removeFavorite(mealId);
-    listItem.remove();
-  });
-  listItem.appendChild(removeButton);
-
-  return listItem;
+  return item;
 }
+
 
 
   function removeFavorite(mealId) {
