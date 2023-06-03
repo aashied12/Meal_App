@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Function to retrieve the favorites from local storage
     function getFavorites() {
-    // Use the shared getFavorites function from script.js
-    const favorites = window.parent.getFavorites();
-    return favorites;
-  }
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  return favorites;
+}
   
 
   // Function to display the favorites on the favorites page
