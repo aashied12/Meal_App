@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchButton = document.getElementById('searchButton');
   const mealResults = document.getElementById('mealResults');
   const favoritesButton = document.getElementById('favoritesButton');
+  let searchResults = [];
   
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keydown', (event) => {
@@ -22,14 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   async function handleSearch() {
-    const searchTerm = searchInput.value;
-    if (searchTerm.trim() !== '') {
-      const meals = await searchMeals(searchTerm);
-      displayMeals(meals);
-    } else {
-      mealResults.innerHTML = '';
-    }
+  const searchTerm = searchInput.value;
+  if (searchTerm.trim() !== '') {
+    searchResults = await searchMeals(searchTerm); // Store the search results
+    displayMeals(searchResults);
+  } else {
+    mealResults.innerHTML = '';
   }
+}
 
   async function searchMeals(searchTerm) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
@@ -95,22 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
     function addFavorite(mealId, mealTitle) {
-    // Retrieve the favorites from local storage and parse the JSON string
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  // Retrieve the favorites from local storage and parse the JSON string
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    // Check if the meal is already in the favorites list
-    const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
-    if (!existingMeal) {
-      // Retrieve the meal details from the search results
-      const meal = searchResults.find((result) => result.idMeal === mealId);
+  // Check if the meal is already in the favorites list
+  const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
+  if (!existingMeal) {
+    // Retrieve the meal details from the search results
+    const meal = searchResults.find((result) => result.idMeal === mealId);
 
-      // Add the meal to the favorites list
-      favorites.push(meal);
+    // Add the meal to the favorites list
+    favorites.push(meal);
 
-      // Update the favorites in local storage
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
+    // Update the favorites in local storage
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }
+}
 
   // Function to retrieve the favorites from local storage
   function getFavorites() {
