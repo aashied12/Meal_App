@@ -70,12 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const removeButton = document.createElement('button');
   removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2');
-  removeButton.innerHTML = '<i class="bi bi-trash"></i> Remove from Favorites';
+  removeButton.textContent = 'Remove from Favorites';
   removeButton.dataset.mealId = meal.idMeal;
   item.appendChild(removeButton);
 
   return item;
 }
+
 
 
   // Update the favorites page on load
