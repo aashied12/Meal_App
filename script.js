@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   mealResults.addEventListener('click', handleAddToFavorites);
   favoritesButton.addEventListener('click', redirectToFavorites);
+  
+  function redirectToFavorites() {
+  window.location.href = 'favorites.html';
+}
+
 
   async function handleSearch() {
     const searchTerm = searchInput.value;
@@ -146,10 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return item;
   }
-  function redirectToFavorites() {
-  window.location.href = 'favorites.html';
-}
-
+  
 
   // Update the favorites page on load
   displayFavorites();
