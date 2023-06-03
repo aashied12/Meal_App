@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
   image.src = meal.strMealThumb;
   image.alt = meal.strMeal;
   // Set the image width and height
-  image.style.width = '350px';
-  image.style.height = '350px';
+  image.style.width = '300px';
+  image.style.height = '300px';
   item.appendChild(image);
 
   const title = document.createElement('h5');
