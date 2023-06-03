@@ -78,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     heartButton.dataset.mealId = meal.idMeal;
     titleContainer.appendChild(heartButton);
 
+    const description = document.createElement('p');
+    description.classList.add('card-text');
+    description.textContent = meal.strInstructions.substring(0, 150) + '...';
+    cardBody.appendChild(description);
+
     return card;
   }
 
@@ -117,7 +122,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 }
 
-  
+  // Function to retrieve the favorites from local storage
+  function getFavorites() {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    return favorites;
+  }
+
+  // Function to display the favorites on the favorites page
+  function displayFavorites() {
+    const favoritesList = document.getElementById('favoritesList');
+    const favorites = getFavorites();
+
+    if (favorites.length === 0) {
+      favoritesList.innerHTML = '<p>No favorite meals found.</p>';
+      return;
+    }
+
+    favoritesList.innerHTML = '';
+    favorites.forEach((meal) => {
+      const favoriteItem = createFavoriteItem(meal);
+      favoritesList.appendChild(favoriteItem);
+    });
+  }
 
   // Function to create a favorite item element
   function createFavoriteItem(meal) {
@@ -140,4 +166,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update the favorites page on load
   displayFavorites();
 });
-
