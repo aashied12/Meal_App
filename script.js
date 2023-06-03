@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mealTitle = mealCard.querySelector('.card-title').textContent;
 
     // Check if the meal is already in the favorites list
-    const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
+    const existingMeal = getFavorites().find((meal) => meal.idMeal === mealId);
     if (!existingMeal) {
       addFavorite(mealId, mealTitle);
       event.target.textContent = 'Added to Favorites';
