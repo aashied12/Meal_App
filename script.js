@@ -78,13 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
   heartButton.dataset.mealId = meal.idMeal;
   titleContainer.appendChild(heartButton);
 
-  // Create the link to the meal detail page
-  const link = document.createElement('a');
-  link.href = `meal-detail.html?id=${meal.idMeal}`;
-  link.appendChild(card);
+  const mealDetailsButton = document.createElement('button');
+  mealDetailsButton.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-2', 'btn-lg');
+  mealDetailsButton.textContent = 'Meal-details';
+  mealDetailsButton.dataset.mealId = meal.idMeal;
+  titleContainer.appendChild(mealDetailsButton);
 
-  return link;
+  // Create the link to the meal detail page
+  mealDetailsButton.addEventListener('click', redirectToMealDetail);
+
+  function redirectToMealDetail() {
+    window.location.href = `meal-detail.html?id=${meal.idMeal}`;
+  }
+
+  return card;
 }
+
 
 
   function handleAddToFavorites(event) {
