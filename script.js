@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  
+
   function createMealCard(meal) {
   const card = document.createElement('div');
   card.classList.add('card', 'mb-3');
@@ -93,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   return card;
 }
+
 
 
 
