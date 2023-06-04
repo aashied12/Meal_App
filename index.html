@@ -34,6 +34,67 @@
   <button id="favoritesButton" class="btn btn-primary float-end">Favorites</button>
 
   <script src="script.js"></script>
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('mealResults');
+
+    searchInput.addEventListener('input', handleSearchInput);
+
+    async function handleSearchInput() {
+      const searchTerm = searchInput.value;
+      if (searchTerm.trim() !== '') {
+        const meals = await searchMeals(searchTerm);
+        displayMeals(meals);
+      } else {
+        clearSearchResults();
+      }
+    }
+
+    async function searchMeals(searchTerm) {
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
+      const data = await response.json();
+      return data.meals;
+    }
+
+    function displayMeals(meals) {
+      searchResults.innerHTML = '';
+
+      if (!meals) {
+        searchResults.innerHTML = '<p>No meals found.</p>';
+        return;
+      }
+
+      meals.forEach((meal) => {
+        const card = createMealCard(meal);
+        searchResults.appendChild(card);
+      });
+    }
+
+    function createMealCard(meal) {
+      const card = document.createElement('div');
+      card.classList.add('card', 'mb-3');
+
+      const image = document.createElement('img');
+      image.src = meal.strMealThumb;
+      image.classList.add('card-img-top');
+      card.appendChild(image);
+
+      const cardBody = document.createElement('div');
+      cardBody.classList.add('card-body');
+      card.appendChild(cardBody);
+
+      const title = document.createElement('h5');
+      title.classList.add('card-title');
+      title.textContent = meal.strMeal;
+      cardBody.appendChild(title);
+
+      return card;
+    }
+
+    function clearSearchResults() {
+      searchResults.innerHTML = '';
+    }
+  </script>
 </body>
 
 </html>
