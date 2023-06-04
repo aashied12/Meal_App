@@ -51,37 +51,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function createMealCard(meal) {
-    const card = document.createElement('div');
-    card.classList.add('card', 'mb-3');
+  const card = document.createElement('div');
+  card.classList.add('card', 'mb-3');
 
-    const image = document.createElement('img');
-    image.src = meal.strMealThumb;
-    image.classList.add('card-img-top');
-    card.appendChild(image);
+  const image = document.createElement('img');
+  image.src = meal.strMealThumb;
+  image.classList.add('card-img-top');
+  card.appendChild(image);
 
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-    card.appendChild(cardBody);
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  card.appendChild(cardBody);
 
-    const titleContainer = document.createElement('div');
-    titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
-    cardBody.appendChild(titleContainer);
+  const titleContainer = document.createElement('div');
+  titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+  cardBody.appendChild(titleContainer);
 
-    const title = document.createElement('h5');
-    title.classList.add('card-title');
-    title.textContent = meal.strMeal;
-    titleContainer.appendChild(title);
+  const title = document.createElement('h5');
+  title.classList.add('card-title');
+  title.textContent = meal.strMeal;
+  titleContainer.appendChild(title);
 
-    const heartButton = document.createElement('button');
-    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
-    heartButton.textContent = 'Add to Favorites';
-    heartButton.dataset.mealId = meal.idMeal;
-    titleContainer.appendChild(heartButton);
+  const heartButton = document.createElement('button');
+  heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
+  heartButton.textContent = 'Add to Favorites';
+  heartButton.dataset.mealId = meal.idMeal;
+  titleContainer.appendChild(heartButton);
 
-    
+  // Create the link to the meal detail page
+  const link = document.createElement('a');
+  link.href = `meal-detail.html?id=${meal.idMeal}`;
+  link.appendChild(card);
 
-    return card;
-  }
+  return link;
+}
+
 
   function handleAddToFavorites(event) {
   if (event.target.tagName === 'BUTTON') {
