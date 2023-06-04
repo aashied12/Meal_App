@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   function handleAddToFavorites(event) {
-  if (event.target.tagName === 'BUTTON') {
+  if (event.target.classList.contains('btn-outline-danger')) {
     const mealId = event.target.dataset.mealId;
     const mealCard = event.target.closest('.card');
     const mealTitle = mealCard.querySelector('.card-title').textContent;
@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 }
+
 
 
     function addFavorite(mealId, mealTitle) {
