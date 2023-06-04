@@ -53,31 +53,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to create a favorite item element
   function createFavoriteItem(meal) {
-  const item = document.createElement('div');
-  item.classList.add('favorite-item');
+    const item = document.createElement('div');
+    item.classList.add('favorite-item');
 
-  const image = document.createElement('img');
-  image.src = meal.strMealThumb;
-  image.alt = meal.strMeal;
-  // Set the image width and height
-  image.style.width = '300px';
-  image.style.height = '300px';
-  item.appendChild(image);
+    const image = document.createElement('img');
+    image.src = meal.strMealThumb;
+    image.alt = meal.strMeal;
+    // Set the image width and height
+    image.style.width = '300px';
+    image.style.height = '300px';
+    item.appendChild(image);
 
-  const title = document.createElement('h5');
-  title.textContent = meal.strMeal;
-  item.appendChild(title);
+    const title = document.createElement('h5');
+    title.textContent = meal.strMeal;
+    item.appendChild(title);
 
-  const removeButton = document.createElement('button');
-  removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
-  removeButton.textContent = 'Remove from Favorites';
-  removeButton.dataset.mealId = meal.idMeal;
-  item.appendChild(removeButton);
+    const removeButton = document.createElement('button');
+    removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
+    removeButton.textContent = 'Remove from Favorites';
+    removeButton.dataset.mealId = meal.idMeal;
+    item.appendChild(removeButton);
 
-  return item;
-}
+    return item;
+  }
 
+  // Homepage button event listener
+  const homepageButton = document.getElementById('homepageButton');
+  homepageButton.addEventListener('click', redirectToHomepage);
 
+  function redirectToHomepage() {
+    window.location.href = 'index.html';
+  }
 
   // Update the favorites page on load
   displayFavorites();
