@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mealResults = document.getElementById('mealResults');
   const favoritesButton = document.getElementById('favoritesButton');
   let searchResults = [];
-
+  
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
@@ -16,20 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   mealResults.addEventListener('click', handleAddToFavorites);
   favoritesButton.addEventListener('click', redirectToFavorites);
-
+  
   function redirectToFavorites() {
-    window.location.href = 'favorites.html';
-  }
+  window.location.href = 'favorites.html';
+}
+
 
   async function handleSearch() {
-    const searchTerm = searchInput.value;
-    if (searchTerm.trim() !== '') {
-      searchResults = await searchMeals(searchTerm); // Store the search results
-      displayMeals(searchResults);
-    } else {
-      mealResults.innerHTML = '';
-    }
+  const searchTerm = searchInput.value;
+  if (searchTerm.trim() !== '') {
+    searchResults = await searchMeals(searchTerm); // Store the search results
+    displayMeals(searchResults);
+  } else {
+    mealResults.innerHTML = '';
   }
+}
 
   async function searchMeals(searchTerm) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
@@ -49,104 +50,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  
+
   function createMealCard(meal) {
-    const card = document.createElement('div');
-    card.classList.add('card', 'mb-3');
+  const card = document.createElement('div');
+  card.classList.add('card', 'mb-3');
 
-    const image = document.createElement('img');
-    image.src = meal.strMealThumb;
-    image.classList.add('card-img-top');
-    card.appendChild(image);
+  const image = document.createElement('img');
+  image.src = meal.strMealThumb;
+  image.classList.add('card-img-top');
+  card.appendChild(image);
 
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-    card.appendChild(cardBody);
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  card.appendChild(cardBody);
 
-    const titleContainer = document.createElement('div');
-    titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
-    cardBody.appendChild(titleContainer);
+  const titleContainer = document.createElement('div');
+  titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+  cardBody.appendChild(titleContainer);
 
-    const title = document.createElement('h5');
-    title.classList.add('card-title');
-    title.textContent = meal.strMeal;
-    titleContainer.appendChild(title);
+  const title = document.createElement('h5');
+  title.classList.add('card-title');
+  title.textContent = meal.strMeal;
+  titleContainer.appendChild(title);
 
-    const heartButton = document.createElement('button');
-    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
-    heartButton.textContent = 'Add to Favorites';
-    heartButton.dataset.mealId = meal.idMeal;
-    titleContainer.appendChild(heartButton);
+  const heartButton = document.createElement('button');
+  heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
+  heartButton.textContent = 'Add to Favorites';
+  heartButton.dataset.mealId = meal.idMeal;
+  titleContainer.appendChild(heartButton);
 
-    const mealDetailsButton = document.createElement('button');
-    mealDetailsButton.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-2', 'btn-lg');
-    mealDetailsButton.textContent = 'Meal Details';
-    mealDetailsButton.dataset.mealId = meal.idMeal;
-    titleContainer.appendChild(mealDetailsButton);
+  const mealDetailsButton = document.createElement('button');
+  mealDetailsButton.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-2', 'btn-lg');
+  mealDetailsButton.textContent = 'Meal-details';
+  mealDetailsButton.dataset.mealId = meal.idMeal;
+  titleContainer.appendChild(mealDetailsButton);
 
-    // Create the link to the meal detail page
-    mealDetailsButton.addEventListener('click', redirectToMealDetail);
+  // Create the link to the meal detail page
+  mealDetailsButton.addEventListener('click', redirectToMealDetail);
 
-    function redirectToMealDetail() {
-      window.location.href = `meal-detail.html?id=${meal.idMeal}`;
-    }
-
-    return card;
+  function redirectToMealDetail() {
+    window.location.href = `meal-detail.html?id=${meal.idMeal}`;
   }
+
+  return card;
+}
+
+
+
 
   function handleAddToFavorites(event) {
-    if (event.target.tagName === 'BUTTON') {
-      const mealId = event.target.dataset.mealId;
-      const mealCard = event.target.closest('.card');
-      const mealTitle = mealCard.querySelector('.card-title').textContent;
-
-      // Check if the meal is already in the favorites list
-      const existingMeal = getFavorites().find((meal) => meal.idMeal === mealId);
-      if (!existingMeal) {
-        addFavorite(mealId, mealTitle);
-        event.target.textContent = 'Added to Favorites';
-        event.target.classList.remove('btn-outline-danger');
-        event.target.classList.add('btn-success');
-      } else {
-        removeFavorite(mealId);
-        event.target.textContent = 'Add to Favorites';
-        event.target.classList.remove('btn-success');
-        event.target.classList.add('btn-outline-danger');
-      }
-    }
-  }
-
-  function addFavorite(mealId, mealTitle) {
-    // Retrieve the favorites from local storage and parse the JSON string
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  if (event.target.classList.contains('btn-outline-danger')) {
+    const mealId = event.target.dataset.mealId;
+    const mealCard = event.target.closest('.card');
+    const mealTitle = mealCard.querySelector('.card-title').textContent;
 
     // Check if the meal is already in the favorites list
-    const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
+    const existingMeal = getFavorites().find((meal) => meal.idMeal === mealId);
     if (!existingMeal) {
-      // Retrieve the meal details from the search results
-      const meal = searchResults.find((result) => result.idMeal === mealId);
-
-      // Add the meal to the favorites list
-      favorites.push(meal);
-
-      // Update the favorites in local storage
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+      addFavorite(mealId, mealTitle);
+      event.target.textContent = 'Added to Favorites';
+      event.target.classList.remove('btn-outline-danger');
+      event.target.classList.add('btn-success');
     }
   }
+}
 
-  function removeFavorite(mealId) {
-    // Retrieve the favorites from local storage and parse the JSON string
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    // Find the index of the meal in the favorites list
-    const index = favorites.findIndex((meal) => meal.idMeal === mealId);
-    if (index !== -1) {
-      // Remove the meal from the favorites list
-      favorites.splice(index, 1);
 
-      // Update the favorites in local storage
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
+    function addFavorite(mealId, mealTitle) {
+  // Retrieve the favorites from local storage and parse the JSON string
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+  // Check if the meal is already in the favorites list
+  const existingMeal = favorites.find((meal) => meal.idMeal === mealId);
+  if (!existingMeal) {
+    // Retrieve the meal details from the search results
+    const meal = searchResults.find((result) => result.idMeal === mealId);
+
+    // Add the meal to the favorites list
+    favorites.push(meal);
+
+    // Update the favorites in local storage
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }
+}
 
   // Function to retrieve the favorites from local storage
   function getFavorites() {
@@ -187,23 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return item;
   }
+  
 
   // Update the favorites page on load
   displayFavorites();
-  // Check if a meal is in the favorites list when the page loads
-  window.addEventListener('load', checkFavorites);
-
-  function checkFavorites() {
-    const favorites = getFavorites();
-    const heartButtons = document.querySelectorAll('.card .btn-outline-danger');
-    heartButtons.forEach((button) => {
-      const mealId = button.dataset.mealId;
-      const isFavorite = favorites.some((meal) => meal.idMeal === mealId);
-      if (isFavorite) {
-        button.textContent = 'Added to Favorites';
-        button.classList.remove('btn-outline-danger');
-        button.classList.add('btn-success');
-      }
-    });
-  }
 });
