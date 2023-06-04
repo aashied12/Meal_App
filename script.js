@@ -50,60 +50,60 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function createMealCard(meal) {
-    const card = document.createElement('div');
-    card.classList.add('card', 'mb-3');
+  const card = document.createElement('div');
+  card.classList.add('card', 'mb-3');
 
-    const image = document.createElement('img');
-    image.src = meal.strMealThumb;
-    image.classList.add('card-img-top');
-    card.appendChild(image);
+  const image = document.createElement('img');
+  image.src = meal.strMealThumb;
+  image.classList.add('card-img-top');
+  card.appendChild(image);
 
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body');
-    card.appendChild(cardBody);
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  card.appendChild(cardBody);
 
-    const titleContainer = document.createElement('div');
-    titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
-    cardBody.appendChild(titleContainer);
+  const titleContainer = document.createElement('div');
+  titleContainer.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+  cardBody.appendChild(titleContainer);
 
-    const title = document.createElement('h5');
-    title.classList.add('card-title');
-    title.textContent = meal.strMeal;
-    titleContainer.appendChild(title);
+  const title = document.createElement('h5');
+  title.classList.add('card-title');
+  title.textContent = meal.strMeal;
+  titleContainer.appendChild(title);
 
-    const heartButton = document.createElement('button');
-    heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
-    titleContainer.appendChild(heartButton);
+  const heartButton = document.createElement('button');
+  heartButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'mx-2', 'btn-lg');
+  titleContainer.appendChild(heartButton);
 
-    // Check if the meal is already in the favorites list
-    const favorites = getFavorites();
-    const isFavorite = favorites.some((favMeal) => favMeal.idMeal === meal.idMeal);
+  const favorites = getFavorites();
+  const isFavorite = favorites.some((favMeal) => favMeal.idMeal === meal.idMeal);
 
-    if (isFavorite) {
-      heartButton.textContent = 'Added to Favorites';
-      heartButton.classList.add('btn-success');
-    } else {
-      heartButton.textContent = 'Add to Favorites';
-      heartButton.classList.remove('btn-success');
-    }
-
-    heartButton.dataset.mealId = meal.idMeal;
-
-    const mealDetailsButton = document.createElement('button');
-    mealDetailsButton.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-2', 'btn-lg');
-    mealDetailsButton.textContent = 'Meal-details';
-    mealDetailsButton.dataset.mealId = meal.idMeal;
-    titleContainer.appendChild(mealDetailsButton);
-
-    // Create the link to the meal detail page
-    mealDetailsButton.addEventListener('click', redirectToMealDetail);
-
-    function redirectToMealDetail() {
-      window.location.href = `meal-detail.html?id=${meal.idMeal}`;
-    }
-
-    return card;
+  if (isFavorite) {
+    heartButton.textContent = 'Added to Favorites';
+    heartButton.classList.add('btn-success');
+  } else {
+    heartButton.textContent = 'Add to Favorites';
+    heartButton.classList.remove('btn-success');
   }
+
+  heartButton.dataset.mealId = meal.idMeal;
+
+  const mealDetailsButton = document.createElement('button');
+  mealDetailsButton.classList.add('btn', 'btn-primary', 'btn-sm', 'mx-2', 'btn-lg');
+  mealDetailsButton.textContent = 'Meal-details';
+  mealDetailsButton.dataset.mealId = meal.idMeal;
+  titleContainer.appendChild(mealDetailsButton);
+
+  // Create the link to the meal detail page
+  mealDetailsButton.addEventListener('click', redirectToMealDetail);
+
+  function redirectToMealDetail() {
+    window.location.href = `meal-detail.html?id=${meal.idMeal}`;
+  }
+
+  return card;
+}
+
 
   function handleAddToFavorites(event) {
     if (event.target.classList.contains('btn-outline-danger')) {
