@@ -6,60 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meal Detail</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
-  <style>
-    .container {
-      max-width: 500px;
-      margin-top: 30px;
-    }
-    img {
-      max-width: 100%;
-      margin-bottom: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
     <h1>Meal Detail</h1>
-    <div id="mealDetails"></div>
+    <div id="mealDetail"></div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const mealDetails = document.getElementById('mealDetails');
-
-      // Get the meal ID from the query string
-      const urlParams = new URLSearchParams(window.location.search);
-      const mealId = urlParams.get('id');
-
-      // Fetch the meal details using the meal ID
-      fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
-        .then(response => response.json())
-        .then(data => {
-          const meal = data.meals[0];
-          displayMealDetails(meal);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          mealDetails.innerHTML = '<p>Failed to fetch meal details.</p>';
-        });
-
-      function displayMealDetails(meal) {
-        if (!meal) {
-          mealDetails.innerHTML = '<p>No meal details found.</p>';
-          return;
-        }
-
-        const image = document.createElement('img');
-        image.src = meal.strMealThumb;
-        mealDetails.appendChild(image);
-
-        const title = document.createElement('h2');
-        title.textContent = meal.strMeal;
-        mealDetails.appendChild(title);
-      }
-    });
-  </script>
+  <script src="meal-detail.js"></script>
 </body>
 
 </html>
