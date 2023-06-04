@@ -8,12 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // If the meal ID is available, fetch the meal details and display them
   if (mealId) {
     fetchMealDetails(mealId)
-      .then(meal => displayMealDetails(meal))
-      .catch(error => console.error(error));
+      .then((meal) => displayMealDetails(meal))
+      .catch((error) => console.error(error));
   }
 
   async function fetchMealDetails(mealId) {
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
+    const response = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
+    );
     const data = await response.json();
     return data.meals[0];
   }
@@ -30,5 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
+  }
+
+  // Homepage button event listener
+  const homepageButton = document.getElementById('homepageButton');
+  homepageButton.addEventListener('click', redirectToHomepage);
+
+  function redirectToHomepage() {
+    window.location.href = 'index.html';
   }
 });
