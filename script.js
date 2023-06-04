@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 
+
     function addFavorite(mealId, mealTitle) {
   // Retrieve the favorites from local storage and parse the JSON string
   const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
