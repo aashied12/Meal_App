@@ -78,10 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heartButton.dataset.mealId = meal.idMeal;
     titleContainer.appendChild(heartButton);
 
-    const description = document.createElement('p');
-    description.classList.add('card-text');
-    description.textContent = meal.strInstructions.substring(0, 150) + '...';
-    cardBody.appendChild(description);
+    
 
     return card;
   }
